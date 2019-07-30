@@ -1,0 +1,52 @@
+{
+  "family": "jenkins",
+  "executionRoleArn": "arn:aws:iam::00000000000:role/xxxxxxxxxxxxxxxxx",
+  "containerDefinitions": [
+    {
+      "name": "jenkins",
+      "image": "spycetek/jenkins-blueocean",
+      "cpu": 1024,
+      "memoryReservation": 900,
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 80
+        },
+        {
+          "containerPort": 5000,
+          "hostPort": 5000
+        }
+      ],
+      "mountPoints": [
+        {
+          "sourceVolume": "efs",
+          "containerPath": "/var/jenkins_home",
+          "readOnly": false
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/jenkins",
+          "awslogs-region": "ap-southeast-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ],
+  "volumes": [
+    {
+      "name": "efs",
+      "dockerVolumeConfiguration": {
+        "scope": "task",
+        "driver": "local",
+        "driverOpts": {
+          "type": "nfs",
+          "device": "fs-xxxxxxxx.efs.ap-southeast-1.amazonaws.com:/",
+          "o": "addr=fs-xxxxxxxx.efs.ap-southeast-1.amazonaws.com,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport"
+        }
+      }
+    }
+  ]
+}
