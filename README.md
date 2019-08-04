@@ -22,9 +22,8 @@ Instruction and a configuration file to setup Jenkins server on AWS ECS.
 
 ### Create EFS
 Just create by following the wizard from the AWS EFS console. All default is fine.
+Take note of the domain of the file system for later use.
 
-After creationg, change `device` and `o` in jenkins-task.json file with the
-domain name of the created EFS.
 
 ### Create CloudWatch Logs
 Create log group with the name specified in jenkins-task.json file.  
@@ -65,10 +64,17 @@ If you don't want to use it, skip this and aremove the related lines from jenkin
 ### Start Jenkins Container on ECS
 #### Create Role
 Create `ecsTaskExecutionRole` by following "To create the ecsTaskExecutionRole IAM role" section in ["Amazon ECS Task Execution IAM Role" page](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html).
-
-Change `executionRoleArn` in jenkins-task.json file to the arn of the role you just created.
+Take note of arn of `ecsTaskExecutionRole` for later use.
 
 #### Register the Task
+Prepare task definition file `jenkins-task.json` for example.
+You can copy `jenkins-task.json.dist` to create this file.
+
+Modify those in the task definition file;
+
+* executionRoleArn: arn of execution role created above
+* device and o: domain name of the created EFS
+
 ```
 aws ecs register-task-definition --cli-input-json file://./jenkins-task.json
 ```
