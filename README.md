@@ -124,3 +124,12 @@ aws ecs stop-task --cluster default --task arn:aws:ecs:ap-southeast-1:0781064028
 
 It seems easiest way is to use the reverse proxy of Nginx.  
 https://itnext.io/setting-up-https-for-jenkins-with-nginx-everything-in-docker-4a118dc29127
+
+
+## Updating Jenkins Server
+1. Update Jenkins by updating [the docker image](https://cloud.docker.com/u/spycetek/repository/docker/spycetek/jenkins-blueocean).
+2. Tag the image new version.
+3. Update jenkins-task.json file with the new image version.
+4. Stop currently running ECS task of Jenkins.
+5. Start new ECS task for Jenkins by doing from "Register the Task" in  
+   "Start Jenkins Container on ECS" section above.
